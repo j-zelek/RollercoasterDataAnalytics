@@ -1,9 +1,9 @@
+using System.Text.Json;
 using Microsoft.Extensions.Options;
 using RestSharp;
 using RestSharp.Serializers.Json;
 using RollercoasterDataAnalytics.Configurations;
 using RollercoasterDataAnalytics.Models;
-using System.Text.Json;
 
 namespace RollercoasterDataAnalytics.Services;
 
@@ -41,15 +41,13 @@ public class WartezeitenAppService : IWartezeitenAppService
     private const string PARKS_ENDPOINT = "parks";
     private const string WAITING_TIMES_ENDPOINT = "waitingtimes";
 
-    public WartezeitenAppService(ILogger<WartezeitenAppService> logger, IOptions<WartezeitenAppConfiguration> wartezeitenAppConfiguration, IOptions<JsonSerializerOptions> jsonSerializerOptions)
+    public WartezeitenAppService(ILogger<WartezeitenAppService> logger, IOptions<WartezeitenAppConfiguration> wartezeitenAppConfiguration, IHttpClientFactory clientFactory,IOptions<JsonSerializerOptions> jsonSerializerOptions)
     {
         _logger = logger;
         _configuration = wartezeitenAppConfiguration.Value ?? throw new ArgumentNullException($"Failed to load configuration for {typeof(WartezeitenAppConfiguration).Name}");
         _jsonSerializerOptions = jsonSerializerOptions.Value ?? throw new ArgumentNullException($"Failed to load configuration for {typeof(JsonSerializerOptions).Name}");
-        _restClient = new RestClient(_configuration.Uri, configureSerialization: s =>
-        {
-            s.UseSystemTextJson(_jsonSerializerOptions);
-        });
+
+        _restClient = new RestClient(clientFactory.CreateClient(Constants.WARTEZEITEN_APP_CLIENT_NAME), configureSerialization: s => { s.UseSystemTextJson(_jsonSerializerOptions); });
         _restClient.AddDefaultHeader(LANGUAGE_HEADER, _configuration.Language);
     }
 
