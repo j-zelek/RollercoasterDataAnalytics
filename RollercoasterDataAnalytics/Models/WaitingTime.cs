@@ -7,6 +7,7 @@
         public string? Code { get; set; }
         public Status Status { get; set; }
         public required string Name { get; set; }
+        public int Waitingtime { get; set; }
     }
 
     public enum Status
