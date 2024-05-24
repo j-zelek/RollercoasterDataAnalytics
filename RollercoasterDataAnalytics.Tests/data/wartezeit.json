@@ -1,0 +1,29 @@
+{
+  "parks": [
+    {
+      "id": "altontowers",
+      "name": "Alton Towers",
+      "land": "Great Britain"
+    },
+    {
+      "id": "bobbejaanland",
+      "name": "Bobbejaanland",
+      "land": "Belgium"
+    },
+    {
+      "id": "chessingtonworld",
+      "name": "Chessington World of Adventures",
+      "land": "Great Britain"
+    }
+  ],
+  "waitingtimes": [
+    {
+      "date": "2023-09-29",
+      "time": "12:52",
+      "code": "383533",
+      "waitingtime": 20,
+      "status": "opened",
+      "name": "WODAN - Timburcoaster"
+    }
+  ]
+}
