@@ -1,4 +1,6 @@
-﻿namespace RollercoasterDataAnalytics.Models
+﻿using System.Text.Json.Serialization;
+
+namespace RollercoasterDataAnalytics.Models
 {
     public class WaitingTime
     {
@@ -7,7 +9,8 @@
         public string? Code { get; set; }
         public Status Status { get; set; }
         public required string Name { get; set; }
-        public int Waitingtime { get; set; }
+        [JsonPropertyName("waitingtime")]
+        public int Duration { get; set; }
     }
 
     public enum Status
