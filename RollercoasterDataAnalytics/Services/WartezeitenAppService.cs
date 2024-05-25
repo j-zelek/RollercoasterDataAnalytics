@@ -56,7 +56,7 @@ public class WartezeitenAppService : IWartezeitenAppService
         var request = new RestRequest($"{_configuration.ApiVersion}/{PARKS_ENDPOINT}");
         try
         {
-            _logger.LogDebug("Fetching Parks");
+            _logger.LogDebug("Fetching Parks from {0}", _configuration.Uri);
             var response = await _restClient.ExecuteAsync<IEnumerable<Park>>(request).ConfigureAwait(false);
             if (response.IsSuccessStatusCode)
                 return response.Data;
@@ -75,7 +75,7 @@ public class WartezeitenAppService : IWartezeitenAppService
         request.AddHeader(WAITING_TIMES_QUERY_HEADER, parkId);
         try
         {
-            _logger.LogDebug("Requesting waiting times for park {0}", parkId);
+            _logger.LogDebug("Requesting waiting times for park {0} from {1}", parkId, _configuration.Uri);
             var response = await _restClient.ExecuteAsync<IEnumerable<WaitingTime>>(request).ConfigureAwait(false);
             if (response.IsSuccessStatusCode)
                 return response.Data;
