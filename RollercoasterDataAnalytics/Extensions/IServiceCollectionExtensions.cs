@@ -1,6 +1,7 @@
 ﻿using RollercoasterDataAnalytics.Configurations;
 using RollercoasterDataAnalytics.Json;
 using RollercoasterDataAnalytics.Services;
+using RollercoasterDataAnalytics.Services.BackgroundServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -37,6 +38,7 @@ namespace RollercoasterDataAnalytics.Extensions
                 c.BaseAddress = new Uri(baseUri);
             });
             services.AddTransient<IWartezeitenAppService, WartezeitenAppService>();
+            services.AddHostedService<WartezeitenAppBackgroundService>();
 
             return services;
         }
