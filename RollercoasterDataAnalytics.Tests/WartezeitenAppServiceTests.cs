@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -7,6 +8,7 @@ using RichardSzalay.MockHttp;
 using RollercoasterDataAnalytics.Configurations;
 using RollercoasterDataAnalytics.Services;
 using RollercoasterDataAnalytics.Models;
+using RollercoasterDataAnalytics.Json;
 
 namespace RollercoasterDataAnalytics.Tests
 {
@@ -33,6 +35,9 @@ namespace RollercoasterDataAnalytics.Tests
                 Language = "en"
             };
             _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            _jsonOptions.Converters.Add(new DateOnlyConverter());
+            _jsonOptions.Converters.Add(new TimeOnlyConverter());
+            _jsonOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
         }
 
         [Fact]
@@ -59,15 +64,26 @@ namespace RollercoasterDataAnalytics.Tests
         }
 
         [Fact]
-        public async void GetWaitingTimesByParkIdSucceeds()
+        public async void GetWaitingTimes_Succeeds()
         {
             SetupClient($"{TEST_URI}/v1/waitingtimes", HttpStatusCode.OK, "waitingtimes");
 
             var service = new WartezeitenAppService(_mockLogger.Object, Options.Create(_config), _mockFactory.Object, Options.Create(_jsonOptions));
-            var list = await service.GetWaitingTimes("somePark");
+            var list = await service.GetWaitingTimesAsync("somePark");
 
             Assert.NotNull(list);
             Assert.IsType<WaitingTime>(list.First());
+        }
+
+        [Fact]
+        public async void GetWaitingTimes_Fails()
+        {
+            SetupClient($"{TEST_URI}/v1/waitingtimes", HttpStatusCode.NotFound);
+
+            var service = new WartezeitenAppService(_mockLogger.Object, Options.Create(_config), _mockFactory.Object, Options.Create(_jsonOptions));
+            var list = await service.GetWaitingTimesAsync("somePark");
+
+            Assert.Null(list);
         }
 
         private static string GetMockResponse(string? key)
