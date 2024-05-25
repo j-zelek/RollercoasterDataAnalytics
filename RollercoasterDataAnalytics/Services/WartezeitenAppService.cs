@@ -20,13 +20,13 @@ public interface IWartezeitenAppService
     /// Detailed documentation can be found here: https://api.wartezeiten.app/#/default/get_v1_waitingtimes
     /// </summary>
     /// <returns></returns>
-    Task<IEnumerable<WaitingTime>?> GetWaitingTimes(Park park) => GetWaitingTimes(park.Id);
+    Task<IEnumerable<WaitingTime>?> GetWaitingTimesAsync(Park park) => GetWaitingTimesAsync(park.Id);
     /// <summary>
     /// Fetches all waiting times for the given park. The endpoint caches reponses for 5 minutes.
     /// Detailed documentation can be found here: https://api.wartezeiten.app/#/default/get_v1_waitingtimes
     /// </summary>
     /// <returns></returns>
-    Task<IEnumerable<WaitingTime>?> GetWaitingTimes(string parkId);
+    Task<IEnumerable<WaitingTime>?> GetWaitingTimesAsync(string parkId);
 }
 
 public class WartezeitenAppService : IWartezeitenAppService
@@ -69,7 +69,7 @@ public class WartezeitenAppService : IWartezeitenAppService
         return null;
     }
 
-    public async Task<IEnumerable<WaitingTime>?> GetWaitingTimes(string parkId)
+    public async Task<IEnumerable<WaitingTime>?> GetWaitingTimesAsync(string parkId)
     {
         var request = new RestRequest($"{_configuration.ApiVersion}/{WAITING_TIMES_ENDPOINT}");
         request.AddHeader(WAITING_TIMES_QUERY_HEADER, parkId);
