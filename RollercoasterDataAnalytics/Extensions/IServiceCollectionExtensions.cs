@@ -1,6 +1,8 @@
 ﻿using RollercoasterDataAnalytics.Configurations;
+using RollercoasterDataAnalytics.Json;
 using RollercoasterDataAnalytics.Services;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace RollercoasterDataAnalytics.Extensions
 {
@@ -11,6 +13,9 @@ namespace RollercoasterDataAnalytics.Extensions
             services.Configure<JsonSerializerOptions>(jsonOptions =>
             {
                 jsonOptions.PropertyNameCaseInsensitive = true;
+                jsonOptions.Converters.Add(new DateOnlyConverter());
+                jsonOptions.Converters.Add(new TimeOnlyConverter());
+                jsonOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
             });
 
             return services;
